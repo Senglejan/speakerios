@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="com-siliconmalta-speakerios" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>SpeakerIos</name>
+    <js-module name="SpeakerIos" src="www/SpeakerIos.js">
+        <clobbers target="speakerIos" />
+    </js-module>
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="SpeakerIos">
+                <param name="ios-package" value="SpeakerIos" />
+            </feature>
+        </config-file>
+        <source-file src="src/ios/SpeakerIos.swift" />
+    </platform>
+</plugin>
