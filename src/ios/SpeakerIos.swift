@@ -7,49 +7,49 @@ import AVFoundation
   dynamic private func audioRouteChangeListener(notification:NSNotification) {
 
     if (enabled){
-     let audioRouteChangeReason = notification.userInfo![AVAudioSessionRouteChangeReasonKey]
-
-        let xx = audioRouteChangeReason!.intValue
 
         let session:AVAudioSession = AVAudioSession.sharedInstance()
+        
+        let audioRouteChangeReason = notification.userInfo![AVAudioSessionRouteChangeReasonKey] as! UInt
+        
+        switch audioRouteChangeReason {
 
-        switch xx {
-
-        //Case 3 is category change
-        case 3:
+            case AVAudioSessionRouteChangeReason.categoryChange.rawValue:
+                
                do {
-                      try session.overrideOutputAudioPort(AVAudioSessionPortOverride.Speaker)
-                  } catch _ {
+                      try session.overrideOutputAudioPort(AVAudioSessionPortOverride.speaker)
+                  } catch  {
 
                   }
+               break;
         default:
             break
         }
     }
 
    }
-
+    
+ @objc(enableSpeaker:)
   func enableSpeaker(command: CDVInvokedUrlCommand){
 
-    NSNotificationCenter.defaultCenter().addObserver(
+    NotificationCenter.default.addObserver(
           self,
-          selector: "audioRouteChangeListener:",
-          name: AVAudioSessionRouteChangeNotification,
+          selector: #selector(SpeakerIos.audioRouteChangeListener(notification:)),
+          name: .AVAudioSessionRouteChange,
           object: nil)
 
     enabled = command.arguments[0] as? Bool ?? true
 
     let pluginResult = CDVPluginResult(
             status: CDVCommandStatus_OK,
-            messageAsString: "done"
+            messageAs: "done"
           )
 
-    self.commandDelegate!.sendPluginResult(
+    self.commandDelegate!.send(
       pluginResult,
       callbackId: command.callbackId
     )
 
   }
-
 
 }
